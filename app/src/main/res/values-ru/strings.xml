@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="splash_title">Звездные войны</string>
+    <string name="but_load_data">Загрузить данные</string>
+</resources>

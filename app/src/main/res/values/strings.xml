@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">StarWars</string>
+    <string name="splash_title">Star Wars</string>
+    <string name="but_load_data">Load Data</string>
+</resources>
