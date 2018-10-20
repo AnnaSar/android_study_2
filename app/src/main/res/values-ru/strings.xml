@@ -2,4 +2,5 @@
 <resources>
     <string name="splash_title">Звездные войны</string>
     <string name="but_load_data">Загрузить данные</string>
+    <string name="failure_title">Ошибка</string>
 </resources>

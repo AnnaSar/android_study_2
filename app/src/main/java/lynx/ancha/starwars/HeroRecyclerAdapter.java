@@ -13,14 +13,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import lynx.ancha.starwars.model.People;
+
 public class HeroRecyclerAdapter extends RecyclerView.Adapter<HeroRecyclerAdapter.HeroViewHolder> {
 
-    private List<String> mNames = new ArrayList<>();
+    private List<People> mPeoples = new ArrayList<>();
 
-    public void addAll(String[] names) {
-        if (names != null) {
-            mNames.addAll(Arrays.asList(names));
-        }
+//    public void addAll(String[] names) {
+//        if (names != null) {
+//            mNames.addAll(Arrays.asList(names));
+//        }
+//        notifyDataSetChanged();
+//    }
+    public void addAll(List<People> peoples) {
+        mPeoples.addAll(peoples);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        mPeoples.clear();
         notifyDataSetChanged();
     }
 
@@ -35,13 +46,17 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter<HeroRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull HeroViewHolder heroViewHolder, int position) {
         heroViewHolder.setPosition(position);
-        String name = mNames.get(position);
-        heroViewHolder.bind(name);
+        People people = mPeoples.get(position);
+        heroViewHolder.bind(people);
     }
+
+//        String name = mNames.get(position);
+//        heroViewHolder.bind(name);
+//    }
 
     @Override
     public int getItemCount() {
-        return mNames.size();
+        return mPeoples.size();
     }
 
     public static class HeroViewHolder
@@ -71,8 +86,8 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter<HeroRecyclerAdapte
             Log.d("TAG", "mPosition: " + mPosition);
         }
 
-        public void bind(String name) {
-            mHeroNameTextView.setText(name);
+        public void bind(People people) {
+            mHeroNameTextView.setText(people.getName());
         }
     }
 }
