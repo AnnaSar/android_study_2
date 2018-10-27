@@ -1,7 +1,6 @@
 package lynx.ancha.starwars;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import lynx.ancha.starwars.model.Result;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import lynx.ancha.starwars.model.rest.RawResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +27,37 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     private HeroRecyclerAdapter mAdapter;
     private RecycleScrollListener mScrollListener;
+    private static final int LIMIT = 10;
+
+    private Observer<RawResult> mRestObserver = new Observer<RawResult>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+            Log.d("TAG","onSubscribe");
+        }
+
+        @Override
+        public void onNext(RawResult rawResult) {
+            Log.d("TAG","onNext");
+            mAdapter.hideProgress();
+            mScrollListener.setLoading(rawResult.getResults().size() < LIMIT);
+            mAdapter.addAll(rawResult.getResults());
+            showContent();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d("TAG","onError");
+            mScrollListener.setLoading(false);
+            showError();
+
+        }
+
+        @Override
+        public void onComplete() {
+            Log.d("TAG","onComplete");
+            mScrollListener.setLoading(false);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         setupList();
         setupListener();
         showProgress();
-        loadData();
+        loadData(1);
     }
 
     private void startCardActivity(String name) {
@@ -76,11 +111,18 @@ public class HomeActivity extends AppCompatActivity {
         mErrorLayout.setVisibility(View.VISIBLE);
     }
 
-    private void loadData() {
-        ((App)getApplication()).getPeopleRestService()
-            .getAllPeoples(1).enqueue(new Callback<Result>() {
+    private void loadData(int page) {
+        ((App)getApplication())
+                .getPeopleRestService()
+                .getAllPeoples(page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mRestObserver);
+
+        /*((App)getApplication()).getPeopleRestService()
+            .getAllPeoples(1).enqueue(new Callback<RawResult>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<RawResult> call, Response<RawResult> response) {
                 if (response.isSuccessful()) {
                     if(response.body() != null) {
                         mAdapter.addAll(response.body().getResults());
@@ -93,11 +135,11 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<RawResult> call, Throwable t) {
                 showError();
                 Log.d("Tag", "error");
             }
-        });
+        });*/
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -108,29 +150,30 @@ public class HomeActivity extends AppCompatActivity {
 //        }, 3200);
     }
 
-    private void fetchData(Integer page){
-        ((App)getApplication()).getPeopleRestService()
-                        .getAllPeoples(page).enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                mScrollListener.setLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    mAdapter.addAll(response.body().getResults());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-               mScrollListener.setLoading(false);
-            }
-        });
-    }
+ //   private void fetchData(Integer page){
+//        ((App)getApplication()).getPeopleRestService()
+//                        .getAllPeoples(page).enqueue(new Callback<RawResult>() {
+//            @Override
+//            public void onResponse(Call<RawResult> call, Response<RawResult> response) {
+//                mScrollListener.setLoading(false);
+//                if (response.isSuccessful() && response.body() != null) {
+//                    mAdapter.addAll(response.body().getResults());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<RawResult> call, Throwable t) {
+//               mScrollListener.setLoading(false);
+//            }
+//        });
+ //  }
 
     private class RecycleScrollListener extends RecyclerView.OnScrollListener {
         private Integer mTotalCount;
         private Integer mLastItem;
         private Integer mThreshold = 5;
         private Boolean mIsLoading = false;
+        private Boolean mIsFullLoader = false;
 
         @Override
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -147,13 +190,18 @@ public class HomeActivity extends AppCompatActivity {
             mLastItem = ((LinearLayoutManager)mRecyclerView.getLayoutManager())
                     .findLastVisibleItemPosition();
             if (!mIsLoading && mTotalCount < (mLastItem + mThreshold)) {
-                fetchData((mTotalCount/10) + 1);
+                loadData((mTotalCount/10) + 1);
+                mAdapter.showProgress();
                 setLoading(true);
             }
         }
 
         public void setLoading(Boolean loading) {
             mIsLoading = loading;
+        }
+
+        public void setFillLoader(Boolean foolLoader) {
+            mIsFullLoader = foolLoader;
         }
 
     }

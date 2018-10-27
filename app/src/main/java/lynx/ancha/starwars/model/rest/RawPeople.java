@@ -1,8 +1,8 @@
-package lynx.ancha.starwars.model;
+package lynx.ancha.starwars.model.rest;
 
 import com.google.gson.annotations.SerializedName;
 
-public class People {
+public class RawPeople {
     @SerializedName("name")
     private String mName;
 
@@ -30,8 +30,13 @@ public class People {
     @SerializedName("homeworld")
     private String mHomeworld;
 
+    @SerializedName("url")
+    private String mUrl;
+
 
     public String getName() {
         return mName;
     }
+
+    public static class Empty extends RawPeople { }
 }
