@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <include layout="@layout/item_progress"/>
+        <include layout="@layout/layout_item_progress"/>
 
     </FrameLayout>
 

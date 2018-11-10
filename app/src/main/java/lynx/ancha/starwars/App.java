@@ -37,9 +37,9 @@ public class App extends Application {
     }
 
     private void buildDB() {
-//        mAppDatabase = Room
-//                .databaseBuilder(getApplicationContext(), AppDatabase.class, "star-wars")
-//                .build();
+        mAppDatabase = Room
+                .databaseBuilder(getApplicationContext(), AppDatabase.class, "star-wars")
+                .build();
     }
 
     public RestApiPeoples getPeopleRestService(){

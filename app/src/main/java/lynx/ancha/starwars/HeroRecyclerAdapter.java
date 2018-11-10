@@ -12,13 +12,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lynx.ancha.starwars.model.DataBase.entity.EntPeoples;
 import lynx.ancha.starwars.model.rest.RawPeople;
 
 public class HeroRecyclerAdapter extends RecyclerView.Adapter {
+
+    public interface Listener {
+        void onClickPeople(EntPeoples people);
+    }
+
     private static final int VIEW_PROGRESS = 1;
     private static final int VIEW_ITEM = 2;
 
-    private List<RawPeople> mPeoples = new ArrayList<>();
+    private List<EntPeoples> mPeoples = new ArrayList<>();
+    private Listener mListener;
 
 //    public void addAll(String[] names) {
 //        if (names != null) {
@@ -26,26 +33,28 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
 //        }
 //        notifyDataSetChanged();
 //    }
-    public void addAll(List<RawPeople> peoples) {
+    public void addAll(List<EntPeoples> peoples) {
         mPeoples.addAll(peoples);
         notifyDataSetChanged();
     }
 
-    public void clear() {
-        mPeoples.clear();
-        notifyDataSetChanged();
-    }
+//    public void clear() {
+//        mPeoples.clear();
+//        notifyDataSetChanged();
+//    }
 
-    public void showProgress(){
-        if (mPeoples.isEmpty() || !(mPeoples.get(getItemCount()-1) instanceof RawPeople.Empty)) {
-            mPeoples.add(new RawPeople.Empty());
-            notifyItemRemoved(getItemCount()-1);
+    public void setListener(Listener listener) {mListener = listener; }
+
+    public void showProgress() {
+        if (mPeoples.isEmpty() || !(mPeoples.get(getItemCount() - 1) instanceof EntPeoples.Empty)) {
+            mPeoples.add(new EntPeoples.Empty());
+            notifyItemInserted(getItemCount() - 1);
         }
     }
 
-    public void hideProgress(){
-        if (!mPeoples.isEmpty() && mPeoples.get(getItemCount()-1) instanceof RawPeople.Empty) {
-            mPeoples.remove(getItemCount()-1);
+    public void hideProgress() {
+        if (!mPeoples.isEmpty() && mPeoples.get(getItemCount() - 1) instanceof EntPeoples.Empty) {
+            mPeoples.remove(getItemCount() - 1);
             notifyItemRemoved(getItemCount());
         }
     }
@@ -59,8 +68,18 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
             return new HeroViewHolder(view);
         } else {
             View view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.layout_for_include_home, viewGroup, false);
+                    .inflate(R.layout.layout_item_progress, viewGroup, false);
             return new ProgressViewHolder(view);
+        }
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mPeoples.get(position) instanceof EntPeoples.Empty) {
+            return VIEW_PROGRESS;
+        } else {
+            return VIEW_ITEM;
         }
     }
 
@@ -68,10 +87,11 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof HeroViewHolder) {
             ((HeroViewHolder)viewHolder).setPosition(position);
-             RawPeople people = mPeoples.get(position);
+             EntPeoples people = mPeoples.get(position);
             ((HeroViewHolder)viewHolder).bind(people);
         }
     }
+
 
 //        String name = mNames.get(position);
 //        heroViewHolder.bind(name);
@@ -82,9 +102,7 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
         return mPeoples.size();
     }
 
-    public static class HeroViewHolder extends RecyclerView.ViewHolder
-            implements
-            View.OnClickListener {
+    public class HeroViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mHeroNameTextView;
         private LinearLayout mContainer;
@@ -104,11 +122,13 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            Log.d("TAG", "mPosition: " + mPosition);
+            if (mListener != null) {
+                mListener.onClickPeople(mPeoples.get(mPosition));
+            }
         }
 
-        public void bind(RawPeople people) {
-            mHeroNameTextView.setText(people.getName());
+        public void bind(EntPeoples people) {
+            mHeroNameTextView.setText(people.getmName());
         }
     }
 

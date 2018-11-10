@@ -75,11 +75,11 @@ public class EntPeoples {
         this.mMass = mMass;
     }
 
-    public String getmHair_color() {
+    public String getmHairColor() {
         return mHairColor;
     }
 
-    public void setmHair_color(String mHair_color) {
+    public void setmHairColor(String mHair_color) {
         this.mHairColor = mHair_color;
     }
 
@@ -115,11 +115,9 @@ public class EntPeoples {
         this.mGender = mGender;
     }
 
-    public String getmHomeworld() {
-        return mHomeworld;
-    }
+    public String getmHomeworld() { return mHomeworld; }
 
-    public void setmHomeworld(String mHomeworld) {
+    public void setmHomeWorld(String mHomeworld) {
         this.mHomeworld = mHomeworld;
     }
 
@@ -130,4 +128,7 @@ public class EntPeoples {
     public void setmImagePeople(String mImagePeople) {
         this.mImagePeople = mImagePeople;
     }
+
+    public static class Empty extends EntPeoples { }
+
 }
