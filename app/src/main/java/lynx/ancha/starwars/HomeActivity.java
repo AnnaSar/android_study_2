@@ -9,13 +9,17 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+//import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,10 +37,12 @@ public class HomeActivity
         AppCompatActivity implements HeroRecyclerAdapter.Listener {
 //public class HomeActivity extends AppCompatActivity {
 
-    FrameLayout mProgressLayout;
-    FrameLayout mContentLayout;
-    FrameLayout mErrorLayout;
-    RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.progress) FrameLayout mProgressLayout;
+    @BindView(R.id.content) FrameLayout mContentLayout;
+    @BindView(R.id.error) FrameLayout mErrorLayout;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+
     private HeroRecyclerAdapter mAdapter;
     private RecyclerScrollListener mScrollListener;
     private static final int LIMIT = 10;
@@ -80,7 +86,11 @@ public class HomeActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_main);
-        bindViews();
+        ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
+        //bindViews();
         setupList();
         setupListener();
         showProgress();
@@ -90,6 +100,7 @@ public class HomeActivity
     private void startCardActivity(Long id) {
         Intent intent = new Intent(this, CardActivity.class);
         intent.putExtra(CardActivity.PARAM_ID, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -156,7 +167,7 @@ public class HomeActivity
                     people.setmHeight(Integer.parseInt(rawPeople.getmHeight()));
                 } catch (NumberFormatException ignored) {}
                 try {
-                    people.setmMass(Integer.getInteger(rawPeople.getmMass()));
+                    people.setmMass(Integer.parseInt(rawPeople.getmMass()));
                 } catch (NumberFormatException ignored) {}
 
                 people.setmHairColor(rawPeople.getmHairColor());

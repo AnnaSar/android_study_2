@@ -1,17 +1,24 @@
 package lynx.ancha.starwars;
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lynx.ancha.starwars.model.DataBase.entity.EntPeoples;
 import lynx.ancha.starwars.model.rest.RawPeople;
 
@@ -102,33 +109,57 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
         return mPeoples.size();
     }
 
-    public class HeroViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class HeroViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
-        private TextView mHeroNameTextView;
-        private LinearLayout mContainer;
+        @BindView(R.id.image) ImageView mHeroImageView;
+        @BindView(R.id.card_name_text_view) TextView mHeroNameTextView;
+        @BindView(R.id.card_gender_text_view) TextView mHeroGenderTextView;
+        @BindView(R.id.card_birth_text_view) TextView mHeroBirthTextView;
+        @BindView(R.id.card_height_text_view) TextView mHeroHeightTextView;
+        @BindView(R.id.card_mass_text_view) TextView mHeroMassTextView;
+       // private LinearLayout mContainer;
 
         private int mPosition;
 
         HeroViewHolder(@NonNull View itemView) {
             super(itemView);
-            mContainer = itemView.findViewById(R.id.container);
-            mHeroNameTextView = itemView.findViewById(R.id.card_name_text_view);
-            mContainer.setOnClickListener(this);
+            ButterKnife.bind(this,itemView);
+
+//            mContainer = itemView.findViewById(R.id.container);
+//            mHeroNameTextView = itemView.findViewById(R.id.card_name_text_view);
+//            mContainer.setOnClickListener(this);
         }
 
         void setPosition(int position) {
             mPosition = position;
         }
 
-        @Override
-        public void onClick(View view) {
+        @OnClick(R.id.container)
+        public void onClick() {
             if (mListener != null) {
                 mListener.onClickPeople(mPeoples.get(mPosition));
             }
         }
 
         public void bind(EntPeoples people) {
+
+            Resources resources = mHeroNameTextView.getResources();
+
+            Glide.with(mHeroImageView.getContext()).load(people.getmImagePeople()).into(mHeroImageView);
+
             mHeroNameTextView.setText(people.getmName());
+            mHeroGenderTextView.setText(resources.getString(
+                    R.string.item_card_people_gender, people.getmGender()
+            ));
+            mHeroBirthTextView.setText(resources.getString(
+                    R.string.item_card_people_birth, people.getmBirthYear()
+            ));
+            mHeroHeightTextView.setText(resources.getString(
+                    R.string.item_card_people_height, String.valueOf(people.getmHeight())
+            ));
+            mHeroMassTextView.setText(resources.getString(
+                    R.string.item_card_people_mass, String.valueOf(people.getmMass())
+            ));
         }
     }
 
