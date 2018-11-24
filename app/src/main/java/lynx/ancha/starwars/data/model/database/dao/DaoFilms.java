@@ -1,4 +1,4 @@
-package lynx.ancha.starwars.model.DataBase.dao;
+package lynx.ancha.starwars.data.model.database.dao;
 
 import android.arch.persistence.room.Dao;
 

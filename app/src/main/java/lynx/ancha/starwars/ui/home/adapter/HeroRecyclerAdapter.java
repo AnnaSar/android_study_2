@@ -1,14 +1,12 @@
-package lynx.ancha.starwars;
+package lynx.ancha.starwars.ui.home.adapter;
 
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,8 +17,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lynx.ancha.starwars.model.DataBase.entity.EntPeoples;
-import lynx.ancha.starwars.model.rest.RawPeople;
+import lynx.ancha.starwars.R;
+import lynx.ancha.starwars.data.model.database.entity.EntPeoples;
+import lynx.ancha.starwars.ui.widgets.TemplateTextView;
 
 public class HeroRecyclerAdapter extends RecyclerView.Adapter {
 
@@ -105,19 +104,19 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
 //    }
 
     @Override
-    public int getItemCount() {
-        return mPeoples.size();
-    }
+        public int getItemCount() {
+            return mPeoples.size();
+        }
 
-    public class HeroViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
+        public class HeroViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
 
-        @BindView(R.id.image) ImageView mHeroImageView;
-        @BindView(R.id.card_name_text_view) TextView mHeroNameTextView;
-        @BindView(R.id.card_gender_text_view) TextView mHeroGenderTextView;
-        @BindView(R.id.card_birth_text_view) TextView mHeroBirthTextView;
-        @BindView(R.id.card_height_text_view) TextView mHeroHeightTextView;
-        @BindView(R.id.card_mass_text_view) TextView mHeroMassTextView;
-       // private LinearLayout mContainer;
+            @BindView(R.id.image) ImageView mHeroImageView;
+            @BindView(R.id.card_name_text_view) TextView mHeroNameTextView;
+            @BindView(R.id.card_gender_text_view) TemplateTextView mHeroGenderTextView;
+            @BindView(R.id.card_birth_text_view) TemplateTextView mHeroBirthTextView;
+            @BindView(R.id.card_height_text_view) TemplateTextView mHeroHeightTextView;
+            @BindView(R.id.card_mass_text_view) TemplateTextView mHeroMassTextView;
+            // private LinearLayout mContainer;
 
         private int mPosition;
 
@@ -148,18 +147,24 @@ public class HeroRecyclerAdapter extends RecyclerView.Adapter {
             Glide.with(mHeroImageView.getContext()).load(people.getmImagePeople()).into(mHeroImageView);
 
             mHeroNameTextView.setText(people.getmName());
-            mHeroGenderTextView.setText(resources.getString(
-                    R.string.item_card_people_gender, people.getmGender()
-            ));
-            mHeroBirthTextView.setText(resources.getString(
-                    R.string.item_card_people_birth, people.getmBirthYear()
-            ));
-            mHeroHeightTextView.setText(resources.getString(
-                    R.string.item_card_people_height, String.valueOf(people.getmHeight())
-            ));
-            mHeroMassTextView.setText(resources.getString(
-                    R.string.item_card_people_mass, String.valueOf(people.getmMass())
-            ));
+            mHeroGenderTextView.setmTemplatedText(people.getmGender());
+            mHeroBirthTextView.setmTemplatedText(people.getmBirthYear());
+            mHeroHeightTextView.setmTemplatedText(String.valueOf(people.getmHeight()));
+            mHeroMassTextView.setmTemplatedText(String.valueOf(people.getmMass()));
+
+
+//            mHeroGenderTextView.setText(resources.getString(
+//                    R.string.item_card_people_gender, people.getmGender()
+//            ));
+//            mHeroBirthTextView.setText(resources.getString(
+//                    R.string.item_card_people_birth, people.getmBirthYear()
+//            ));
+//            mHeroHeightTextView.setText(resources.getString(
+//                    R.string.item_card_people_height, String.valueOf(people.getmHeight())
+//            ));
+//            mHeroMassTextView.setText(resources.getString(
+//                    R.string.item_card_people_mass, String.valueOf(people.getmMass())
+//            ));
         }
     }
 

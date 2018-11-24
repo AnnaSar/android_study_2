@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import lynx.ancha.starwars.model.DataBase.AppDatabase;
-import lynx.ancha.starwars.rest.RestApiPeoples;
+import lynx.ancha.starwars.data.model.database.AppDatabase;
+import lynx.ancha.starwars.data.rest.RestApiPeoples;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
 
-    private RestApiPeoples mPeopleRestService;
-    private AppDatabase mAppDatabase;
+    private static RestApiPeoples mPeopleRestService;
+    private static AppDatabase mAppDatabase;
 
     @Override
     public void onCreate() {
@@ -42,11 +42,11 @@ public class App extends Application {
                 .build();
     }
 
-    public RestApiPeoples getPeopleRestService(){
+    public static RestApiPeoples getPeopleRestService(){
         return mPeopleRestService;
     }
 
-    public AppDatabase getDatabase() {
+    public static AppDatabase getDatabase() {
         return mAppDatabase;
     }
 

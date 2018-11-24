@@ -1,8 +1,8 @@
-package lynx.ancha.starwars.rest;
+package lynx.ancha.starwars.data.rest;
 
 import io.reactivex.Observable;
 
-import lynx.ancha.starwars.model.rest.RawResult;
+import lynx.ancha.starwars.data.model.rest.RawResult;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

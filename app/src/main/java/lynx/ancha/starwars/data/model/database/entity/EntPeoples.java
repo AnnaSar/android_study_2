@@ -1,4 +1,4 @@
-package lynx.ancha.starwars.model.DataBase.entity;
+package lynx.ancha.starwars.data.model.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

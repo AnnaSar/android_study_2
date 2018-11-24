@@ -1,15 +1,14 @@
-package lynx.ancha.starwars.model.DataBase.dao;
+package lynx.ancha.starwars.data.model.database.dao;
 
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import lynx.ancha.starwars.model.DataBase.entity.EntPeoples;
+import io.reactivex.Single;
+import lynx.ancha.starwars.data.model.database.entity.EntPeoples;
 
 @Dao
 public interface DaoPeoples {
@@ -17,7 +16,7 @@ public interface DaoPeoples {
     List<EntPeoples> getAllPeoples();
 
     @Query("SELECT * FROM peoples WHERE id = :id")
-    EntPeoples getPeopleById(long id);
+    Single<EntPeoples> getPeopleById(long id);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(EntPeoples people);

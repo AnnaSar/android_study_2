@@ -1,4 +1,4 @@
-package lynx.ancha.starwars.model.rest;
+package lynx.ancha.starwars.data.model.rest;
 
 import com.google.gson.annotations.SerializedName;
 

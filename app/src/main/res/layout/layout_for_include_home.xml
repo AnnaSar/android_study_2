@@ -37,32 +37,32 @@
                 android:text="name"
                 />
 
-            <TextView
+            <lynx.ancha.starwars.ui.widgets.TemplateTextView
                 android:id="@+id/card_gender_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="gender"
+                app:template="@string/item_card_people_gender"
                 />
 
-            <TextView
+            <lynx.ancha.starwars.ui.widgets.TemplateTextView
                 android:id="@+id/card_birth_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="birth"
+                app:template="@string/item_card_people_birth"
                 />
 
-            <TextView
+            <lynx.ancha.starwars.ui.widgets.TemplateTextView
                 android:id="@+id/card_height_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="height"
+                app:template="@string/item_card_people_height"
                 />
 
-            <TextView
+            <lynx.ancha.starwars.ui.widgets.TemplateTextView
                 android:id="@+id/card_mass_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="mass"
+                app:template="@string/item_card_people_mass"
                 />
 
         </LinearLayout>
